@@ -10,22 +10,11 @@ import com.hanshan.codepilot.config.WxOpenConfig;
 import com.hanshan.codepilot.constant.UserConstant;
 import com.hanshan.codepilot.exception.BusinessException;
 import com.hanshan.codepilot.exception.ThrowUtils;
-import com.hanshan.codepilot.model.dto.user.UserAddRequest;
-import com.hanshan.codepilot.model.dto.user.UserLoginRequest;
-import com.hanshan.codepilot.model.dto.user.UserQueryRequest;
-import com.hanshan.codepilot.model.dto.user.UserRegisterRequest;
-import com.hanshan.codepilot.model.dto.user.UserUpdateMyRequest;
-import com.hanshan.codepilot.model.dto.user.UserUpdateRequest;
+import com.hanshan.codepilot.model.dto.user.*;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.LoginUserVO;
 import com.hanshan.codepilot.model.vo.UserVO;
 import com.hanshan.codepilot.service.UserService;
-
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -33,12 +22,12 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import static com.hanshan.codepilot.service.impl.UserServiceImpl.SALT;
 

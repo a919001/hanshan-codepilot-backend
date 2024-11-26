@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/code_pilot
     username: root
-    password: 123456
+    password: 1234qwer
   # Redis 配置
   # todo 需替换配置
   redis:
@@ -16,13 +16,13 @@ spring:
     host: localhost
     port: 6379
     timeout: 5000
-    password: 123456
+    password: 1234qwer
   # Elasticsearch 配置
   # todo 需替换配置
   elasticsearch:
     uris: http://localhost:9200
     username: root
-    password: 123456
+    password: 1234qwer
 mybatis-plus:
   configuration:
     # 生产环境关闭日志
@@ -32,4 +32,4 @@ knife4j:
   basic:
     enable: true
     username: root
-    password: 123456
+    password: 1234qwer

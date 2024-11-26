@@ -13,8 +13,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,postId,userId,
-        createTime,updateTime
+        id,post_id,user_id,
+        create_time,update_time
     </sql>
 
     <select id="listFavourPostByPage"

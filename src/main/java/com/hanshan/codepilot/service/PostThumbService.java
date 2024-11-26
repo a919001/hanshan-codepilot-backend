@@ -1,7 +1,7 @@
 package com.hanshan.codepilot.service;
 
-import com.hanshan.codepilot.model.entity.PostThumb;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hanshan.codepilot.model.entity.PostThumb;
 import com.hanshan.codepilot.model.entity.User;
 
 /**
