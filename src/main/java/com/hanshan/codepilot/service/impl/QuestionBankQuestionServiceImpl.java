@@ -107,9 +107,9 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         // 精确查询
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "question", questionId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(questionBankId), "questionBankId", questionBankId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "question_id", questionId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(questionBankId), "question_bank_id", questionBankId);
         // 排序规则
         queryWrapper.orderBy(SqlUtils.validSortField(sortField),
                 sortOrder.equals(CommonConstant.SORT_ORDER_ASC),

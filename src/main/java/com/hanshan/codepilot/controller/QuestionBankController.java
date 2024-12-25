@@ -18,6 +18,7 @@ import com.hanshan.codepilot.model.entity.Question;
 import com.hanshan.codepilot.model.entity.QuestionBank;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.QuestionBankVO;
+import com.hanshan.codepilot.model.vo.QuestionVO;
 import com.hanshan.codepilot.service.QuestionBankService;
 import com.hanshan.codepilot.service.QuestionService;
 import com.hanshan.codepilot.service.UserService;
@@ -148,8 +149,13 @@ public class QuestionBankController {
         if (questionBankQueryRequest.isNeedQueryQuestionList()) {
             QuestionQueryRequest questionQueryRequest = new QuestionQueryRequest();
             questionQueryRequest.setQuestionBankId(id);
+            // 可以按需传递更多参数
+            questionQueryRequest.setPageSize(questionBankQueryRequest.getPageSize());
+            questionQueryRequest.setCurrent(questionBankQueryRequest.getCurrent());
+            // 封装
             Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
-            questionBankVO.setQuestionPage(questionPage);
+            Page<QuestionVO> questionVOPage = questionService.getQuestionVOPage(questionPage, request);
+            questionBankVO.setQuestionVOPage(questionVOPage);
         }
         return ResultUtils.success(questionBankVO);
     }
@@ -180,11 +186,11 @@ public class QuestionBankController {
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-                                                               HttpServletRequest request) {
+                                                                       HttpServletRequest request) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
         // 限制爬虫
-        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(size > 100, ErrorCode.PARAMS_ERROR);
         // 查询数据库
         Page<QuestionBank> questionBankPage = questionBankService.page(new Page<>(current, size),
                 questionBankService.getQueryWrapper(questionBankQueryRequest));
@@ -201,7 +207,7 @@ public class QuestionBankController {
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listMyQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-                                                                 HttpServletRequest request) {
+                                                                         HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 补充查询条件，只查询当前登录用户的数据
         User loginUser = userService.getLoginUser(request);

@@ -1,7 +1,6 @@
 package com.hanshan.codepilot.model.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hanshan.codepilot.model.entity.Question;
 import com.hanshan.codepilot.model.entity.QuestionBank;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -58,7 +57,7 @@ public class QuestionBankVO implements Serializable {
     /**
      * 题库里的题目列表（分页）
      */
-    private Page<Question> questionPage;
+    private Page<QuestionVO> questionVOPage;
 
     /**
      * 封装类转对象

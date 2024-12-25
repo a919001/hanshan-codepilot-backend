@@ -115,7 +115,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // 精确查询
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "user_id", userId);
         // 排序规则
         queryWrapper.orderBy(SqlUtils.validSortField(sortField),
                 sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
@@ -214,6 +214,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 // 取出题目 id 集合
                 Set<Long> questionIdSet = list.stream().map(QuestionBankQuestion::getQuestionId).collect(Collectors.toSet());
                 queryWrapper.in("id", questionIdSet);
+            } else {
+                // 题库为空，则返回空列表
+                return new Page<>(current, size, 0);
             }
         }
         // 查询数据库
