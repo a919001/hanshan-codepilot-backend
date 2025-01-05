@@ -7,7 +7,6 @@ import com.hanshan.codepilot.model.entity.Question;
 import com.hanshan.codepilot.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * 全量同步题目到 es
  */
 // todo 取消注释开启任务
-@Component
+// @Component
 @Slf4j
 public class FullSyncQuestionToEs implements CommandLineRunner {
 

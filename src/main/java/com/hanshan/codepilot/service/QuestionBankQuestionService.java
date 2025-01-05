@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hanshan.codepilot.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import com.hanshan.codepilot.model.entity.QuestionBankQuestion;
+import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.QuestionBankQuestionVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 题库题目服务
@@ -47,4 +49,21 @@ public interface QuestionBankQuestionService extends IService<QuestionBankQuesti
      * @return
      */
     Page<QuestionBankQuestionVO> getQuestionBankQuestionVOPage(Page<QuestionBankQuestion> questionBankQuestionPage, HttpServletRequest request);
+
+    /**
+     * 批量向题库添加题目
+     *
+     * @param questionIdList 题目 id 列表
+     * @param questionBankId 题库 id
+     * @param loginUser 当前登录用户
+     */
+    void batchAddQuestionsToQuestionBank(List<Long> questionIdList, Long questionBankId, User loginUser);
+
+    /**
+     * 批量从题库移除题目
+     *
+     * @param questionIdList 题目 id 列表
+     * @param questionBankId 题库 id
+     */
+    void batchRemoveQuestionsFromQuestionBank(List<Long> questionIdList, Long questionBankId);
 }

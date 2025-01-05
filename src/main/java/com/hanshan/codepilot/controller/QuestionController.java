@@ -10,10 +10,7 @@ import com.hanshan.codepilot.common.ResultUtils;
 import com.hanshan.codepilot.constant.UserConstant;
 import com.hanshan.codepilot.exception.BusinessException;
 import com.hanshan.codepilot.exception.ThrowUtils;
-import com.hanshan.codepilot.model.dto.question.QuestionAddRequest;
-import com.hanshan.codepilot.model.dto.question.QuestionEditRequest;
-import com.hanshan.codepilot.model.dto.question.QuestionQueryRequest;
-import com.hanshan.codepilot.model.dto.question.QuestionUpdateRequest;
+import com.hanshan.codepilot.model.dto.question.*;
 import com.hanshan.codepilot.model.entity.Question;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.QuestionVO;
@@ -262,6 +259,19 @@ public class QuestionController {
         ThrowUtils.throwIf(size > 100, ErrorCode.PARAMS_ERROR);
         Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+    }
+
+    /**
+     * 批量删除题目（仅管理员可用）
+     *
+     * @param questionBatchDeleteRequest 批量删除题目请求
+     */
+    @PostMapping("/delete/batch")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> batchDeleteQuestions(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest) {
+        ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
+        questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
+        return ResultUtils.success(true);
     }
 
 }
