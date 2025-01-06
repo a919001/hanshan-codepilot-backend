@@ -7,6 +7,7 @@ import com.hanshan.codepilot.model.dto.questionBankQuestion.QuestionBankQuestion
 import com.hanshan.codepilot.model.entity.QuestionBankQuestion;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.QuestionBankQuestionVO;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -58,6 +59,14 @@ public interface QuestionBankQuestionService extends IService<QuestionBankQuesti
      * @param loginUser 当前登录用户
      */
     void batchAddQuestionsToQuestionBank(List<Long> questionIdList, Long questionBankId, User loginUser);
+
+    /**
+     * 批量向题库添加题目（事务，仅供内部使用）
+     *
+     * @param questionBankQuestionList 题库题目关联列表
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void batchAddQuestionsToQuestionBankInner(List<QuestionBankQuestion> questionBankQuestionList);
 
     /**
      * 批量从题库移除题目
