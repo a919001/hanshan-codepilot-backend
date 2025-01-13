@@ -1,5 +1,6 @@
 package com.hanshan.codepilot.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,12 +8,14 @@ import com.hanshan.codepilot.common.ErrorCode;
 import com.hanshan.codepilot.constant.CommonConstant;
 import com.hanshan.codepilot.constant.RedisConstant;
 import com.hanshan.codepilot.exception.BusinessException;
+import com.hanshan.codepilot.exception.ThrowUtils;
 import com.hanshan.codepilot.mapper.UserMapper;
 import com.hanshan.codepilot.model.dto.user.UserQueryRequest;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.enums.UserRoleEnum;
 import com.hanshan.codepilot.model.vo.LoginUserVO;
 import com.hanshan.codepilot.model.vo.UserVO;
+import com.hanshan.codepilot.satoken.DeviceUtils;
 import com.hanshan.codepilot.service.UserService;
 import com.hanshan.codepilot.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +115,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         // 3. 记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // request.getSession().setAttribute(USER_LOGIN_STATE, user);
+
+        // 使用 Sa-Token 登录，并指定设备，同端登录互斥
+        StpUtil.login(user.getId(), DeviceUtils.getRequestDevice(request));
+        StpUtil.getSession().set(USER_LOGIN_STATE, user);
+
         return this.getLoginUserVO(user);
     }
 
@@ -156,18 +164,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User getLoginUser(HttpServletRequest request) {
-        // 先判断是否已登录
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User currentUser = (User) userObj;
-        if (currentUser == null || currentUser.getId() == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
-        }
-        // 从数据库查询（追求性能的话可以注释，直接走缓存）
-        long userId = currentUser.getId();
-        currentUser = this.getById(userId);
-        if (currentUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
-        }
+        // 先判断是否已登录（基于 Sa-Token）
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        ThrowUtils.throwIf(loginUserId == null, ErrorCode.NOT_LOGIN_ERROR);
+        User currentUser = this.getById((String) loginUserId);
+        ThrowUtils.throwIf(currentUser == null, ErrorCode.NOT_LOGIN_ERROR);
         return currentUser;
     }
 
@@ -198,7 +199,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         // 仅管理员可查询
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        Object userObj = StpUtil.getSession().get(USER_LOGIN_STATE);
         User user = (User) userObj;
         return isAdmin(user);
     }
@@ -215,11 +216,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public boolean userLogout(HttpServletRequest request) {
-        if (request.getSession().getAttribute(USER_LOGIN_STATE) == null) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
-        }
+        StpUtil.checkLogin();
         // 移除登录态
-        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        StpUtil.logout();
         return true;
     }
 
@@ -303,7 +302,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 获取用户某个年份的签到记录
      *
      * @param userId 用户 id
-     * @param year 年份（若为空则设置为当前年份）
+     * @param year   年份（若为空则设置为当前年份）
      * @return 签到记录映射
      */
     @Override
