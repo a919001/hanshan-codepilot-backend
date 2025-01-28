@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 题库题目接口
+ * 题库题目关联接口
  */
 @RestController
 @RequestMapping("/questionBankQuestion")
@@ -42,22 +42,25 @@ public class QuestionBankQuestionController {
     // region 增删改查
 
     /**
-     * 创建题库题目关联
+     * 创建题库题目关联（仅管理员可用）
      *
-     * @param questionBankQuestionAddRequest
-     * @param request
-     * @return
+     * @param questionBankQuestionAddRequest 创建请求
+     * @param request HttpServletRequest
+     * @return 新关联 id
      */
     @PostMapping("/add")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addQuestionBankQuestion(@RequestBody QuestionBankQuestionAddRequest questionBankQuestionAddRequest, HttpServletRequest request) {
+    public BaseResponse<Long> addQuestionBankQuestion(
+            @RequestBody QuestionBankQuestionAddRequest questionBankQuestionAddRequest,
+            HttpServletRequest request
+    ) {
         ThrowUtils.throwIf(questionBankQuestionAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         QuestionBankQuestion questionBankQuestion = new QuestionBankQuestion();
         BeanUtils.copyProperties(questionBankQuestionAddRequest, questionBankQuestion);
         // 数据校验
         questionBankQuestionService.validQuestionBankQuestion(questionBankQuestion, true);
-        // todo 填充默认值
+        // 填充默认值
         User loginUser = userService.getLoginUser(request);
         questionBankQuestion.setUserId(loginUser.getId());
         // 写入数据库
@@ -69,14 +72,18 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 删除题库题目
+     * 删除题库题目关联（仅管理员可用）
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除请求
+     * @param request HttpServletRequest
+     * @return 成功或失败
      */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteQuestionBankQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> deleteQuestionBankQuestion(
+            @RequestBody DeleteRequest deleteRequest,
+            HttpServletRequest request
+    ) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -96,18 +103,20 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 更新题库题目（仅管理员可用）
+     * 更新题库题目关联（仅管理员可用）
      *
-     * @param questionBankQuestionUpdateRequest
-     * @return
+     * @param questionBankQuestionUpdateRequest 更新题库题目关联请求
+     * @return 成功或失败
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateQuestionBankQuestion(@RequestBody QuestionBankQuestionUpdateRequest questionBankQuestionUpdateRequest) {
+    public BaseResponse<Boolean> updateQuestionBankQuestion(
+            @RequestBody QuestionBankQuestionUpdateRequest questionBankQuestionUpdateRequest
+    ) {
         if (questionBankQuestionUpdateRequest == null || questionBankQuestionUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         QuestionBankQuestion questionBankQuestion = new QuestionBankQuestion();
         BeanUtils.copyProperties(questionBankQuestionUpdateRequest, questionBankQuestion);
         // 数据校验
@@ -123,10 +132,10 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 根据 id 获取题库题目（封装类）
+     * 根据 id 获取题库题目关联（封装类）
      *
-     * @param id
-     * @return
+     * @param id 题库题目关联 id
+     * @return QuestionBankQuestionVO
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionBankQuestionVO> getQuestionBankQuestionVOById(long id, HttpServletRequest request) {
@@ -139,14 +148,16 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 分页获取题库题目列表（仅管理员可用）
+     * 分页获取题库题目关联列表（仅管理员可用）
      *
-     * @param questionBankQuestionQueryRequest
-     * @return
+     * @param questionBankQuestionQueryRequest 获取题库题目关联请求
+     * @return 题库题目关联列表
      */
     @PostMapping("/list/page")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Page<QuestionBankQuestion>> listQuestionBankQuestionByPage(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest) {
+    public BaseResponse<Page<QuestionBankQuestion>> listQuestionBankQuestionByPage(
+            @RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest
+    ) {
         long current = questionBankQuestionQueryRequest.getCurrent();
         long size = questionBankQuestionQueryRequest.getPageSize();
         // 查询数据库
@@ -156,15 +167,17 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 分页获取题库题目列表（封装类）
+     * 分页获取题库题目关联列表（封装类）
      *
-     * @param questionBankQuestionQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQuestionQueryRequest 获取题库题目关联请求
+     * @param request HttpServletRequest
+     * @return 封装后的题库题目关联列表
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<QuestionBankQuestionVO>> listQuestionBankQuestionVOByPage(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest,
-                                                                                       HttpServletRequest request) {
+    public BaseResponse<Page<QuestionBankQuestionVO>> listQuestionBankQuestionVOByPage(
+            @RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest,
+            HttpServletRequest request
+    ) {
         long current = questionBankQuestionQueryRequest.getCurrent();
         long size = questionBankQuestionQueryRequest.getPageSize();
         // 限制爬虫
@@ -177,15 +190,17 @@ public class QuestionBankQuestionController {
     }
 
     /**
-     * 分页获取当前登录用户创建的题库题目列表
+     * 分页获取当前登录用户创建的题库题目关联列表
      *
-     * @param questionBankQuestionQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQuestionQueryRequest 获取题库题目关联请求
+     * @param request HttpServletRequest
+     * @return 当前登录用户创建的题库题目关联列表
      */
     @PostMapping("/my/list/page/vo")
-    public BaseResponse<Page<QuestionBankQuestionVO>> listMyQuestionBankQuestionVOByPage(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest,
-                                                                                         HttpServletRequest request) {
+    public BaseResponse<Page<QuestionBankQuestionVO>> listMyQuestionBankQuestionVOByPage(
+            @RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest,
+            HttpServletRequest request
+    ) {
         ThrowUtils.throwIf(questionBankQuestionQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 补充查询条件，只查询当前登录用户的数据
         User loginUser = userService.getLoginUser(request);
@@ -206,10 +221,11 @@ public class QuestionBankQuestionController {
     /**
      * 移除题库题目关联
      *
-     * @param questionBankQuestionRemoveRequest
-     * @return
+     * @param questionBankQuestionRemoveRequest 移除题库题目关联请求
+     * @return 成功或失败
      */
     @PostMapping("/remove")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> removeQuestionBankQuestion(
             @RequestBody QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest
     ) {
@@ -230,6 +246,7 @@ public class QuestionBankQuestionController {
      * 批量向题库添加题目（仅管理员可用）
      *
      * @param questionBankQuestionBatchAddRequest 批量向题库添加题目请求
+     * @return 成功或失败
      */
     @PostMapping("/add/batch")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -249,6 +266,7 @@ public class QuestionBankQuestionController {
      * 批量从题库移除题目（仅管理员可用）
      *
      * @param questionBankQuestionBatchRemoveRequest 批量从题库移除题目请求
+     * @return 成功或失败
      */
     @PostMapping("/remove/batch")
     @SaCheckRole(UserConstant.ADMIN_ROLE)

@@ -17,7 +17,7 @@ public class MyBatisPlusConfig {
     /**
      * 拦截器配置
      *
-     * @return
+     * @return MybatisPlusInterceptor 实例
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * 题库题目服务实现
+ * 题库题目关联服务实现
  */
 @Service
 @Slf4j
@@ -61,8 +61,8 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     /**
      * 校验数据
      *
-     * @param questionBankQuestion
-     * @param add                  对创建的数据进行校验
+     * @param questionBankQuestion 题库题目关联
+     * @param add 对创建的数据进行校验
      */
     @Override
     public void validQuestionBankQuestion(QuestionBankQuestion questionBankQuestion, boolean add) {
@@ -78,34 +78,23 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
             Question question = questionService.getById(questionId);
             ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
-        // 不需要校验
-        // // todo 从对象中取值
-        // String title = questionBankQuestion.getTitle();
-        // // 创建数据时，参数不能为空
-        // if (add) {
-        //     // todo 补充校验规则
-        //     ThrowUtils.throwIf(StringUtils.isBlank(title), ErrorCode.PARAMS_ERROR);
-        // }
-        // // 修改数据时，有参数则校验
-        // // todo 补充校验规则
-        // if (StringUtils.isNotBlank(title)) {
-        //     ThrowUtils.throwIf(title.length() > 80, ErrorCode.PARAMS_ERROR, "标题过长");
-        // }
     }
 
     /**
      * 获取查询条件
      *
-     * @param questionBankQuestionQueryRequest
-     * @return
+     * @param questionBankQuestionQueryRequest 获取题库题目关联请求
+     * @return 题库题目关联 QueryWrapper
      */
     @Override
-    public QueryWrapper<QuestionBankQuestion> getQueryWrapper(QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest) {
+    public QueryWrapper<QuestionBankQuestion> getQueryWrapper(
+            QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest
+    ) {
         QueryWrapper<QuestionBankQuestion> queryWrapper = new QueryWrapper<>();
         if (questionBankQuestionQueryRequest == null) {
             return queryWrapper;
         }
-        // todo 从对象中取值
+        // 从对象中取值
         Long id = questionBankQuestionQueryRequest.getId();
         Long notId = questionBankQuestionQueryRequest.getNotId();
         String sortField = questionBankQuestionQueryRequest.getSortField();
@@ -127,20 +116,18 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     }
 
     /**
-     * 获取题库题目封装
+     * 获取题库题目关联（封装类）
      *
-     * @param questionBankQuestion
-     * @param request
-     * @return
+     * @param questionBankQuestion 获取题库题目关联请求
+     * @param request HttpServletRequest
+     * @return 封装后的题库题目关联
      */
     @Override
     public QuestionBankQuestionVO getQuestionBankQuestionVO(QuestionBankQuestion questionBankQuestion, HttpServletRequest request) {
         // 对象转封装类
         QuestionBankQuestionVO questionBankQuestionVO = QuestionBankQuestionVO.objToVo(questionBankQuestion);
 
-        // todo 可以根据需要为封装对象补充值，不需要的内容可以删除
-        // region
-        // 1. 关联查询用户信息
+        // 关联查询用户信息
         Long userId = questionBankQuestion.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
@@ -148,35 +135,42 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         }
         UserVO userVO = userService.getUserVO(user);
         questionBankQuestionVO.setUser(userVO);
-        // endregion
 
         return questionBankQuestionVO;
     }
 
     /**
-     * 分页获取题库题目封装
+     * 分页获取题库题目关联列表（封装类）
      *
-     * @param questionBankQuestionPage
-     * @param request
-     * @return
+     * @param questionBankQuestionPage 获取题库题目关联请求
+     * @param request HttpServletRequest
+     * @return 封装后的题库题目关联分页列表
      */
     @Override
-    public Page<QuestionBankQuestionVO> getQuestionBankQuestionVOPage(Page<QuestionBankQuestion> questionBankQuestionPage, HttpServletRequest request) {
+    public Page<QuestionBankQuestionVO> getQuestionBankQuestionVOPage(
+            Page<QuestionBankQuestion> questionBankQuestionPage,
+            HttpServletRequest request
+    ) {
         List<QuestionBankQuestion> questionBankQuestionList = questionBankQuestionPage.getRecords();
-        Page<QuestionBankQuestionVO> questionBankQuestionVOPage = new Page<>(questionBankQuestionPage.getCurrent(), questionBankQuestionPage.getSize(), questionBankQuestionPage.getTotal());
+        Page<QuestionBankQuestionVO> questionBankQuestionVOPage = new Page<>(
+                questionBankQuestionPage.getCurrent(),
+                questionBankQuestionPage.getSize(),
+                questionBankQuestionPage.getTotal()
+        );
         if (CollUtil.isEmpty(questionBankQuestionList)) {
             return questionBankQuestionVOPage;
         }
         // 对象列表 => 封装对象列表
-        List<QuestionBankQuestionVO> questionBankQuestionVOList = questionBankQuestionList.stream().map(questionBankQuestion -> {
-            return QuestionBankQuestionVO.objToVo(questionBankQuestion);
-        }).collect(Collectors.toList());
+        List<QuestionBankQuestionVO> questionBankQuestionVOList = questionBankQuestionList.stream()
+                .map(QuestionBankQuestionVO::objToVo)
+                .collect(Collectors.toList());
 
-        // todo 可以根据需要为封装对象补充值，不需要的内容可以删除
-        // region 可选
-        // 1. 关联查询用户信息
-        Set<Long> userIdSet = questionBankQuestionList.stream().map(QuestionBankQuestion::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        // 关联查询用户信息
+        Set<Long> userIdSet = questionBankQuestionList.stream()
+                .map(QuestionBankQuestion::getUserId)
+                .collect(Collectors.toSet());
+        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet)
+                .stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
         questionBankQuestionVOList.forEach(questionBankQuestionVO -> {
@@ -187,7 +181,6 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
             }
             questionBankQuestionVO.setUser(userService.getUserVO(user));
         });
-        // endregion
 
         questionBankQuestionVOPage.setRecords(questionBankQuestionVOList);
         return questionBankQuestionVOPage;
@@ -198,7 +191,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
      *
      * @param questionIdList 题目 id 列表
      * @param questionBankId 题库 id
-     * @param loginUser      当前登录用户
+     * @param loginUser 当前登录用户
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

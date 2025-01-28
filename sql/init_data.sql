@@ -1,86 +1,299 @@
 -- 初始数据
 use code_pilot;
 
--- 用户表初始数据（密码是 12345678）
-INSERT INTO user (id, user_account, user_password, union_id, mp_open_id, user_name, user_avatar, user_profile, user_role)
-VALUES (1, 'user1', 'b0dd3697a192885d7c055db46155b26a', 'unionId1', 'mpOpenId1', 'user1',
-        'https://www.code-nav.cn/logo.png', '喜欢编程的小白', 'user'),
-       (2, 'user2', 'b0dd3697a192885d7c055db46155b26a', 'unionId2', 'mpOpenId2', 'user2',
-        'https://www.code-nav.cn/logo.png', '全栈开发工程师', 'user'),
-       (3, 'user3', 'b0dd3697a192885d7c055db46155b26a', 'unionId3', 'mpOpenId3', 'user3',
-        'https://www.code-nav.cn/logo.png', '前端爱好者', 'user'),
-       (4, 'user4', 'b0dd3697a192885d7c055db46155b26a', 'unionId4', 'mpOpenId4', 'user4',
-        'https://www.code-nav.cn/logo.png', '后端开发工程师', 'user'),
-       (5, 'hanshan', 'b0dd3697a192885d7c055db46155b26a', NULL, NULL, '寒山', 'https://www.code-nav.cn/logo.png',
-        '系统管理员', 'admin');
+-- 用户表初始数据（初始密码 1234qwer）
+INSERT INTO user (id, user_account, user_password, union_id, mp_open_id, user_name, user_avatar, user_profile,
+                  user_role)
+VALUES (1, 'hanshan', '4f2c0eaf635484454d11126668542e51', NULL, NULL, '寒山', NULL, '系统管理员', 'admin'),
+       (2, 'user1', '4f2c0eaf635484454d11126668542e51', NULL, NULL, 'user1', NULL, '喜欢编程的小白', 'user'),
+       (3, 'user2', '4f2c0eaf635484454d11126668542e51', NULL, NULL, 'user2', NULL, '全栈开发工程师', 'user'),
+       (4, 'user3', '4f2c0eaf635484454d11126668542e51', NULL, NULL, 'user3', NULL, '前端爱好者', 'user'),
+       (5, 'user4', '4f2c0eaf635484454d11126668542e51', NULL, NULL, 'user4', NULL, '后端开发工程师', 'user');
 
 -- 题库表初始数据
 INSERT INTO question_bank (title, description, picture, user_id)
-VALUES ('JavaScript 基础', '包含 JavaScript 的基础知识题目',
-        'https://pic.code-nav.cn/mianshiya/question_bank_picture/1777886594896760834/JldkWf9w_JavaScript.png', 1),
-       ('CSS 样式', '包含 CSS 相关的样式问题',
-        'https://pic.code-nav.cn/mianshiya/question_bank_picture/1777886594896760834/QatnFmEN_CSS.png', 2),
-       ('HTML 基础', 'HTML 标记语言的基本知识', 'https://www.mianshiya.com/logo.png', 3),
-       ('前端框架', 'React, Vue, Angular 等框架相关的题目', 'https://www.mianshiya.com/logo.png', 1),
-       ('算法与数据结构', '数据结构和算法题目', 'https://www.mianshiya.com/logo.png', 2),
-       ('数据库原理', 'SQL 语句和数据库设计', 'https://www.mianshiya.com/logo.png', 3),
-       ('操作系统', '操作系统的基本概念', 'https://www.mianshiya.com/logo.png', 1),
-       ('网络协议', 'HTTP, TCP/IP 等网络协议题目', 'https://www.mianshiya.com/logo.png', 2),
-       ('设计模式', '常见设计模式及其应用', 'https://www.mianshiya.com/logo.png', 3),
-       ('编程语言概述', '多种编程语言的基础知识', 'https://www.mianshiya.com/logo.png', 1),
-       ('版本控制', 'Git 和 SVN 的使用', 'https://www.mianshiya.com/logo.png', 2),
-       ('安全与加密', '网络安全和加密技术', 'https://www.mianshiya.com/logo.png', 3),
-       ('云计算', '云服务和架构', 'https://www.mianshiya.com/logo.png', 1),
-       ('微服务架构', '微服务的设计与实现', 'https://www.mianshiya.com/logo.png', 2),
-       ('容器技术', 'Docker 和 Kubernetes 相关知识', 'https://www.mianshiya.com/logo.png', 3),
-       ('DevOps 实践', '持续集成与持续交付', 'https://www.mianshiya.com/logo.png', 1),
-       ('数据分析', '数据分析和可视化', 'https://www.mianshiya.com/logo.png', 2),
-       ('人工智能', '机器学习与深度学习基础', 'https://www.mianshiya.com/logo.png', 3),
-       ('区块链技术', '区块链的基本原理和应用', 'https://www.mianshiya.com/logo.png', 1),
-       ('项目管理', '软件开发项目的管理和执行', 'https://www.mianshiya.com/logo.png', 2);
+VALUES ('Java 面试题', 'Java 作为广泛应用的编程语言，其扎实的基础对于后端开发至关重要。
+        Java 面试题的考察重点包括：面向对象设计、集合框架、多线程编程、JVM 运行原理和 Java 8 新特性等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/Java.png', 1),
+       ('MySQL 面试题', 'MySQL 作为广泛应用的关系型数据库，在数据管理中至关重要。
+        MySQL 面试题的考察重点包括：数据库设计、SQL 查询、事务管理、索引优化和性能调优等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/MySQL.png', 1),
+       ('Redis 面试题', 'Redis 作为广泛应用的分布式缓存数据库，在高性能系统中发挥着不可或缺的作用。
+        Redis 面试题的考察重点包括：数据类型应用、持久化机制、缓存淘汰策略、哨兵机制和性能优化等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/Redis.png', 1),
+       ('Spring 面试题', 'Spring 作为 Java 企业级开发的核心框架之一，是构建高效、可扩展的 Java 应用的基础。
+        Spring 面试题的考察重点包括：依赖注入、控制反转、面向切面编程、事务管理和 Spring MVC 请求处理流程等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/Spring.png', 1),
+       ('MyBatis 面试题', 'MyBatis 作为主流的持久层框架，广泛应用于数据库访问层的开发。
+        MyBatis 面试题的考察重点包括：SQL 映射、动态 SQL、缓存机制、分页插件和性能优化等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/MyBatis.png', 1),
+       ('SpringBoot 面试题', 'Spring Boot 作为广泛应用的开发框架，极大地简化了基于 Spring 的应用构建过程。
+        Spring Boot 面试题的考察重点包括：自动配置原理、配置文件管理、嵌入式 Web 容器的使用、定时任务和安全框架集成等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/SpringBoot.png', 1),
+       ('SpringCloud 面试题', 'Spring Cloud 作为微服务架构下的服务治理框架，广泛应用分布式系统开发。
+        Spring Cloud 面试题的考察重点包括：服务发现与注册、负载均衡、配置中心、API 网关和链路追踪等。',
+        'https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/QustionBank/SpringCloud.png', 1);
 
 -- 题目表初始数据
 INSERT INTO question (title, content, tags, answer, user_id)
-VALUES ('JavaScript 变量提升', '请解释 JavaScript 中的变量提升现象。', '["JavaScript", "基础"]',
-        '变量提升是指在 JavaScript 中，变量声明会被提升到作用域的顶部。', 1),
-       ('CSS Flexbox 布局', '如何使用 CSS 实现一个水平居中的盒子？', '["CSS", "布局"]',
-        '可以使用 Flexbox 布局，通过设置父容器 display 为 flex，并使用 justify-content: center; 对齐子元素。', 2),
-       ('HTML 中的语义化', '什么是 HTML 的语义化？为什么重要？', '["HTML", "语义化"]',
-        'HTML 语义化是使用正确的标签来描述内容的意义，能够提高可访问性和 SEO 效果。', 3),
-       ('React 中的状态管理', '如何在 React 中管理组件状态？', '["React", "状态管理"]',
-        '可以使用 React 的 useState 或 useReducer 钩子来管理组件状态，或使用 Redux 进行全局状态管理。', 1),
-       ('算法：二分查找', '请实现一个二分查找算法。', '["算法", "数据结构"]',
-        '二分查找是一种在有序数组中查找特定元素的算法，通过不断折半的方式缩小查找范围。', 2),
-       ('数据库索引的作用', '什么是数据库索引？它的作用是什么？', '["数据库", "索引"]',
-        '数据库索引是用于加快查询速度的数据结构，它通过优化查找路径减少查询时间。', 3),
-       ('HTTP 与 HTTPS 的区别', '请解释 HTTP 和 HTTPS 之间的主要区别。', '["网络", "协议"]',
-        'HTTPS 是加密的 HTTP，通过 SSL/TLS 提供更安全的数据传输。', 1),
-       ('设计模式：单例模式', '请解释单例模式的实现及应用场景。', '["设计模式", "单例"]',
-        '单例模式确保一个类只有一个实例，并提供全局访问点。常用于配置类等只需一个实例的场景。', 2),
-       ('Git 中的分支管理', '如何在 Git 中管理分支？', '["版本控制", "Git"]',
-        'Git 中通过 branch 命令创建分支，使用 checkout 切换分支，使用 merge 合并分支。', 3),
-       ('Docker 的基本命令', '列举并解释几个常用的 Docker 命令。', '["容器技术", "Docker"]',
-        '常用命令包括 docker run, docker build, docker ps, docker stop 等。', 1),
-       ('前端性能优化', '列举几个前端性能优化的手段。', '["前端", "性能优化"]',
-        '包括代码分割、资源压缩、缓存策略、懒加载等。', 2),
-       ('JavaScript 闭包的应用', '什么是闭包？举例说明闭包的实际应用。', '["JavaScript", "高级"]',
-        '闭包是指函数能够记住创建时的上下文环境，常用于数据隐藏和模块化编程。', 3),
-       ('数据库事务的特性', '请解释数据库事务的 ACID 特性。', '["数据库", "事务"]',
-        'ACID 代表原子性、一致性、隔离性和持久性，是事务处理的四大特性。', 1),
-       ('CSS 的 BEM 命名规范', '什么是 BEM？如何使用 BEM 进行 CSS 命名？', '["CSS", "命名规范"]',
-        'BEM 代表块（Block）、元素（Element）和修饰符（Modifier），是一种 CSS 命名规范。', 2),
-       ('JavaScript 原型链', '请解释 JavaScript 中的原型链机制。', '["JavaScript", "原型链"]',
-        '原型链是 JavaScript 实现继承的机制，对象通过原型链可以继承其他对象的属性和方法。', 3),
-       ('React 生命周期', '请说明 React 组件的生命周期方法。', '["React", "生命周期"]',
-        'React 组件的生命周期包括初始化、更新和卸载三个阶段，各阶段有不同的生命周期方法。', 1),
-       ('HTTP 状态码 404 与 500 的区别', '请解释 HTTP 状态码 404 和 500 的含义。', '["网络", "HTTP"]',
-        '404 表示未找到资源，500 表示服务器内部错误。', 2),
-       ('Python 与 Java 的区别', '比较 Python 和 Java 的主要区别。', '["编程语言", "Python", "Java"]',
-        'Python 是动态类型语言，语法简洁，而 Java 是静态类型语言，注重严谨性和性能。', 3),
-       ('Vue 的双向数据绑定', '请解释 Vue.js 是如何实现双向数据绑定的。', '["Vue", "数据绑定"]',
-        'Vue.js 通过数据劫持和发布-订阅模式实现了双向数据绑定。', 1),
-       ('前端工程化的意义', '为什么需要前端工程化？', '["前端", "工程化"]',
-        '前端工程化能够提高开发效率、代码质量和可维护性，规范开发流程。', 2);
+VALUES ('你认为 Java 的优势是什么？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+我觉得可以从跨平台、垃圾回收、生态、面向对象四个方面阐述。
+
+* 跨平台，Java 因为中间加了一层 JVM，所以可以做到一次编写，多平台运行。
+
+* 垃圾回收，Java 提供垃圾自动回收功能，虽然说手动管理内存更自由、更细致化，但是很容易出错。
+
+* 生态，Java 的生态圈非常全面，丰富的第三方类库、企业级框架、各种中间件等等。
+
+* 面向对象，Java 是一种严格的面向对象编程语言，支持封装、继承、多态等 OOP 特性。
+
+', 1),
+       ('JDK 和 JRE 有什么区别？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+**JRE**（Java Runtime Environment）指的是 Java 运行环境，包含了 JVM、核心类库和其他支持运行 Java 的文件。
+
+* JVM（Java Virtual Machine）：执行 Java 字节码，提供了 Java 程序的运行环境。
+* 核心类库：一组标准的类库（如 java.lang、java.util 等），供 Java 程序使用。
+* 其他文件：如配置文件、库文件等，支持 JVM 的运行。
+
+**JDK**（Java Development Kit）是用于开发 Java 程序的完整开发环境，**它包含了 JRE**，以及用于开发、调试和监控 Java 程序的工具。
+
+* JRE：JDK 包含了完整的 JRE，因此它也能运行 Java 程序。
+* 开发工具：如编译器（javac）、调试器（jdb）、打包工具（jar）等，用于开发和管理 Java 程序。
+* 附加库和文件：支持开发、文档生成和其他开发相关的任务。
+
+### 扩展知识
+
+JDK 提供的主要开发工具
+
+* javac：Java 编译器，用于将 Java 源代码（.java 文件）编译成字节码（.class文件）。
+* java：Java 程序启动器，用于运行 Java 程序。
+* javadoc：文档生成器，用于从 Java 源代码中提取注释并生成 HTML 格式的 API 文档。
+* jar：归档工具，用于创建和管理 JAR（Java ARchive）文件。
+* jdb：Java 调试器，用于调试 Java 程序。
+* jps：Java 进程状态工具，用于列出当前所有的 Java 进程。
+* jstat：JVM 统计监视工具，用于监视 JVM 统计信息。
+* jstatd：JVM 统计监视守护进程，用于在远程监视 JVM 统计信息。
+* jmap：内存映射工具，用于生成堆转储（heap dump）、查考内存使用情况。
+* jhat：堆分析工具，用于分析堆转储文件。
+* jstack：线程栈追踪工具，用于打印 Java 线程的栈追踪信息。
+* javap：类文件反汇编器，用于反汇编和查看 Java 类文件。
+* jdeps：Java 类依赖分析工具，用于分析类文件或 JAR 文件的依赖关系。
+
+', 1),
+       ('面向对象编程与面向过程编程的区别是什么？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+**面向对象编程**，是一种以对象为中心的编程风格，把类或对象作为基本单元来组织代码，并运用提炼出来的封装、继承和多态来作为代码设计指导。
+
+**面向过程编程**，是一种以过程为中心的编程风格，以过程（函数）作为基本单元来组织代码。面向过程中，函数和数据是分离的。
+
+面向对象注重的是对象之间的交互和模块化设计，而面向过程注重逻辑的分步实现。
+
+### 扩展知识
+
+**面向对象的三大特性**
+
+* **封装**：将数据和行为封装在对象内部，提供接口进行访问，隐藏实现细节，提高安全性。
+* **继承**：子类可以继承父类的属性和方法，实现代码的复用和拓展。
+* **多态**：对象可以通过父类或接口进行多态性调用，不同对象在运行时执行不同的方法。
+
+', 1),
+('什么是 Java 的封装特性？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+**Java 的封装特性**，是面向对象编程的核心原则之一，它指的是将对象内的状态（数据）和行为（方法），封装在一个类的内部，并通过公开的接口与外部进行交互。
+
+**封装的主要目的**，隐藏对象内部的实现细节，只暴露必要的功能，从而保证数据的完整性和减少系统的复杂性。
+
+### 扩展知识
+
+**封装的好处**
+
+* **数据保护**：通过隐藏数据和提供受控的访问方法，可以防止外部代码对数据进行不合法的修改。
+* **维护性**：封装使得对象内部实现与外部接口分离，可以更容易地对内部实现进行修改，而不影响外部使用者。
+* **简化接口**：提供简洁的公共接口，减少外部代码对类的复杂性理解，从而降低系统的耦合度。
+* **代码复用**：通过封装，类可以复用已有的功能而不必重新实现，有助于构建模块化和可维护的代码。
+
+', 1),
+       ('什么是 Java 的继承机制？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+**Java 的继承机制**，是面向对象编程的核心机制之一，它允许一个类（子类）继承另一个类（父类）的属性和方法。继承使得类之间可以形成层次结构，支持代码重用和扩展。它是实现多态、抽象和代码复用的关键机制。
+
+### 扩展知识
+
+**基本概念**
+
+子类继承父类的属性和方法，可以复用和扩展父类的功能。Java 使用 **`extends` 关键字**来表示类的继承关系。
+
+Java 支持单继承，即一个子类只能继承一个父类。子类可以继承父类的所有公共和受保护的成员，但是不能继承父类的私有成员。
+
+子类的构造方法优先调用父类的无参构造方法，如果父类没有无参构造方法，子类必须显式调用父类的其他构造方法。
+
+**`super` 关键字**可以用来调用父类的方法或构造方法，也可以用来访问父类的字段。
+
+**继承的优缺点**
+
+**优点**
+
+* **代码复用**：子类可以复用父类的代码，减少重复实现。
+* **易于维护**：可以通过修改父类代码来影响所有子类。
+
+**缺点**
+
+* **紧耦合**：子类依赖于父类的实现，父类的修改可能会影响子类。
+* **灵活性差**：继承层次结构可能会变得复杂，不易于调整或扩展
+
+', 1),
+       ('为什么 Java 不支持多重继承？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+主要是多继承会产生菱形继承问题。
+
+```java
+-----A-----
+---B - C---
+-----D-----
+```
+
+B、C 继承了 A，然后 D 又继承了 B、C，假设此时要调用 D 内定义在 A 里的方法，因为 B 和 C 都有不同的实现，此时就会出现歧义，不知道该调用哪个。
+
+### 扩展知识
+
+**既然多继承不行，那为什么接口多实现可以？**
+
+在 Java 8 之前，接口是无法定义具体方法实现的，所以即使有多个接口，必须子类自己实现，所以并不会产生歧义。
+
+Java 8 之前出了默认方法，此时就又出现多继承的菱形继承问题了，所以 Java 强制规定，如果多个接口内有相同的默认方法，子类必须重写这个方法，不然编译期就会报错。
+
+', 1),
+       ('什么是 Java 的多态特性？', '&nbsp;', '["简单", "Java"]',
+'### 回答重点
+
+**Java 的多态特性**，是指同一个接口或父类引用变量可以指向不同的对象实例，并根据实际指向的对象类型执行相应的方法。
+
+它允许同一方法在不同对象上表现出不同的行为，是面向对象编程的核心特性之一。
+
+**多态的优点**
+
+* 通过多态，程序可以灵活地处理不同类型的对象，降低代码耦合度，增强系统的可扩展性。新增子类或实现类时，无需修改原有代码，只需通过接口或父类引用调用即可。
+
+### 扩展知识
+
+**编译时多态和运行时多态**
+
+* **编译时多态**：通过方法重载实现，在编译时确定方法的调用。
+* **运行时多态**：通过方法重写实现，在运行时确定方法的调用。
+
+', 1),
+       ('MySQL 中的数据排序是怎么实现的？', '&nbsp', '["简单", "后端", "MySQL"]',
+'### 回答重点
+
+排序过程中，如果排序字段命中索引，则利用**索引排序**。反之，使用**文件排序**。
+
+在文件排序中，如果数据量少则在内存中排序，具体是使用单路排序或双路排序；如果数据量大则利用磁盘文件进行外部排序。一般使用归并排序。
+
+### 扩展知识
+
+在 explain 中分析查询的时候，利用索引排序获取数据显示 Using index，文件排序显示 Using filesort。
+
+#### 索引排序
+
+如果查询语句中的 ORDER BY 子句包含的字段已在索引中，并且索引的排列顺序和 ORDER BY 子句一致，则可以直接利用索引进行排序。
+
+这种方式效率最高，因为索引有序。
+
+#### 文件排序
+
+如果需要排序的数据量较少，则直接在内存中通过 `sort_buffer` 就能排了。
+
+具体是通过 `sort_buffer_size` 参数来控制 `sort_buffer` 的大小，如果需要排序的数据量小于 sort_buffer 则直接在内存中排序；反之，则需要利用磁盘临时文件排序，性能就比较差了。
+
+**单路排序**
+
+在 `sort_buffer` 中，有一个叫 `max_length_for_sort_data` 的参数，默认是 4096 字节。
+
+如果 select 列的数据长度超过它，则 MySQL 采用单路排序，就是将 select 的字段都放置到 sort_buffer 中。
+
+**双路排序**
+
+如果 select 列的数据长度超过 `max_length_for_sort_data`，则 MySQL 采用 **row_id 排序**，即把 row_id（有主键就是主键）+ 排序字段放置到 sort_buffer 中排序。
+
+**存盘文件临时排序**
+
+如果查询的数据超过 sort_buffer，说明内存放不下了，因此需要利用磁盘文件进行外部排序。
+
+一般会使用归并排序，简单理解就是将数据分为很多份文件，单独对文件排序，之后再合并成一个有序的大文件。
+
+利用磁盘排序效率会更低，针对一些情况可以调大 sort_buffer_size，避免磁盘临时文件排序。
+
+', 1),
+       ('Redis 主从复制的实现原理是什么？', '&nbsp', '["中等", "后端", "Redis"]',
+'### 回答重点
+
+Redis 的主从复制是指一个 Redis 实例（主节点）可以将数据复制到另一个或多个从节点，从节点从主节点获取数据并保持同步。
+
+**复制流程**
+
+* **开始同步**：从节点通过向主节点发送 `PSYNC` 命令，发起同步。
+* **全量复制**：如果是第一次连接或之前的连接失效，从节点会请求全量复制，主节点将当前数据快照（RDB 文件）发送给从节点。
+* **增量复制**：全量复制完毕后，主从之间会保持一个长连接，主节点会通过这个连接将后续的写操作传递给从节点执行，从而保持数据的一致。
+
+### 扩展知识
+
+**Redis 主从架构**
+
+下图就是一个 Redis 主从架构图：
+
+<br>
+<img src="https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/Question/Redis-master-slave-architecture.png" />
+<br>
+
+主从架构可实现读写分离。写操作可以请求主节点，而读操作只能请求从节点，这样就能减轻主节点的压力。
+
+<br>
+<img src="https://codepilot-1321967001.cos.ap-shanghai.myqcloud.com/Question/Redis-master-slave-schema-request.png" />
+<br>
+
+整个主从集群仅主节点可写入，其他从节点都通过复制来同步数据，这样就能保证数据的一致性。并且对读请求分散到多个节点，提高了 Redis 的吞吐量，也从一定程度上提高了 Redis 的可用性。
+
+', 1),
+       ('什么是循环依赖？（常问）', '&nbsp', '["简单", "后端", "Spring"]',
+'### 回答重点
+
+循环依赖（Circular Dependency）是指两个或多个模块、组件、类之间相互依赖，形成一个闭环。
+
+简而言之，模块 A 依赖于 模块 B，而模块 B 又依赖于模块 A，这会导致依赖链的循环，无法确定加载或初始化的顺序。
+
+### 扩展知识
+
+**简单示例**
+
+```java
+@Service
+public class A {
+    @Autowired
+    private B b;
+}
+
+@Service
+public class B {
+    @Autowired
+    private A a;
+}
+
+// 依赖 B 或者自己依赖自己
+@Service
+public class A {
+    @Autowired
+    private A a;
+}
+```
+
+', 1);
 
 -- 题库题目关联初始数据
 INSERT INTO question_bank_question (question_bank_id, question_id, user_id)
@@ -91,26 +304,6 @@ VALUES (1, 1, 1),
        (1, 5, 1),
        (1, 6, 1),
        (1, 7, 1),
-       (1, 8, 1),
-       (1, 9, 1),
-       (1, 10, 1),
-       (2, 2, 2),
-       (2, 14, 2),
-       (3, 3, 3),
-       (3, 13, 3),
-       (4, 4, 1),
-       (4, 16, 1),
-       (5, 5, 2),
-       (5, 18, 2),
-       (6, 6, 3),
-       (6, 19, 3),
-       (7, 7, 1),
-       (7, 11, 1),
-       (8, 8, 2),
-       (8, 10, 2),
-       (9, 9, 3),
-       (9, 17, 3),
-       (10, 12, 1),
-       (10, 20, 1);
-
-
+       (2, 8, 1),
+       (3, 9, 1),
+       (4, 10, 1);

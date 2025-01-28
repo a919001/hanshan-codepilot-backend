@@ -2,6 +2,7 @@ package com.hanshan.codepilot.model.dto.questionBankQuestion;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,5 +22,6 @@ public class QuestionBankQuestionBatchAddRequest implements Serializable {
      */
     private List<Long> questionIdList;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

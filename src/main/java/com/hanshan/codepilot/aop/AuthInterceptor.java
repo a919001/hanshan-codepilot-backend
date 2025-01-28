@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 权限校验 AOP
+ * 自定义权限校验 AOP
  */
 // @Aspect
 // @Component
@@ -28,9 +28,9 @@ public class AuthInterceptor {
     /**
      * 执行拦截
      *
-     * @param joinPoint
-     * @param authCheck
-     * @return
+     * @param joinPoint 连接点
+     * @param authCheck 身份检查
+     * @return 拦截 or 放行
      */
     @Around("@annotation(authCheck)")
     public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthCheck authCheck) throws Throwable {

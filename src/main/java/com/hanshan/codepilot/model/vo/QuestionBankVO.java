@@ -62,8 +62,8 @@ public class QuestionBankVO implements Serializable {
     /**
      * 封装类转对象
      *
-     * @param questionBankVO
-     * @return
+     * @param questionBankVO 题库视图
+     * @return 题库实体类
      */
     public static QuestionBank voToObj(QuestionBankVO questionBankVO) {
         if (questionBankVO == null) {
@@ -77,8 +77,8 @@ public class QuestionBankVO implements Serializable {
     /**
      * 对象转封装类
      *
-     * @param questionBank
-     * @return
+     * @param questionBank questionBank 对象
+     * @return questionBankVO
      */
     public static QuestionBankVO objToVo(QuestionBank questionBank) {
         if (questionBank == null) {

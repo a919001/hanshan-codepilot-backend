@@ -26,7 +26,6 @@ import com.hanshan.codepilot.sentinel.SentinelConstant;
 import com.hanshan.codepilot.service.QuestionBankService;
 import com.hanshan.codepilot.service.QuestionService;
 import com.hanshan.codepilot.service.UserService;
-import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -54,17 +53,20 @@ public class QuestionBankController {
     // region 增删改查
 
     /**
-     * 创建题库
+     * 创建题库（仅管理员可用）
      *
-     * @param questionBankAddRequest
-     * @param request
-     * @return
+     * @param questionBankAddRequest 添加题库请求
+     * @param request HttpServletRequest
+     * @return 新题库 id
      */
     @PostMapping("/add")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Long> addQuestionBank(@RequestBody QuestionBankAddRequest questionBankAddRequest, HttpServletRequest request) {
+    public BaseResponse<Long> addQuestionBank(
+            @RequestBody QuestionBankAddRequest questionBankAddRequest,
+            HttpServletRequest request
+    ) {
         ThrowUtils.throwIf(questionBankAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         QuestionBank questionBank = new QuestionBank();
         BeanUtils.copyProperties(questionBankAddRequest, questionBank);
         // 数据校验
@@ -81,15 +83,18 @@ public class QuestionBankController {
     }
 
     /**
-     * 删除题库
+     * 删除题库（仅管理员可用）
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除请求
+     * @param request HttpServletRequest
+     * @return 成功或失败
      */
     @PostMapping("/delete")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> deleteQuestionBank(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+    public BaseResponse<Boolean> deleteQuestionBank(
+            @RequestBody DeleteRequest deleteRequest,
+            HttpServletRequest request
+    ) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -111,16 +116,18 @@ public class QuestionBankController {
     /**
      * 更新题库（仅管理员可用）
      *
-     * @param questionBankUpdateRequest
-     * @return
+     * @param questionBankUpdateRequest 更新题库请求
+     * @return 成功或失败
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateQuestionBank(@RequestBody QuestionBankUpdateRequest questionBankUpdateRequest) {
+    public BaseResponse<Boolean> updateQuestionBank(
+            @RequestBody QuestionBankUpdateRequest questionBankUpdateRequest
+    ) {
         if (questionBankUpdateRequest == null || questionBankUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 处将请求类和 DTO 进行转换
         QuestionBank questionBank = new QuestionBank();
         BeanUtils.copyProperties(questionBankUpdateRequest, questionBank);
         // 数据校验
@@ -136,29 +143,32 @@ public class QuestionBankController {
     }
 
     /**
-     * 根据 id 获取题库（封装类）
+     * 根据 id 获取题库（封装类），hotkey 热点探测
      *
-     * @param questionBankQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQueryRequest 获取题库请求
+     * @param request HttpServletRequest
+     * @return QuestionBankVO
      */
     @GetMapping("/get/vo")
-    public BaseResponse<QuestionBankVO> getQuestionBankVOById(QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
+    public BaseResponse<QuestionBankVO> getQuestionBankVOById(
+            QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request
+    ) {
         ThrowUtils.throwIf(questionBankQueryRequest == null, ErrorCode.PARAMS_ERROR);
         Long id = questionBankQueryRequest.getId();
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
-
-        // 生成 key
-        String key = "bank_detail_" + id;
-        // 如果是热 key
-        if (JdHotKeyStore.isHotKey(key)) {
-            // 从本地缓存中获取缓存值
-            Object cachedQuestionBankVO = JdHotKeyStore.get(key);
-            if (cachedQuestionBankVO != null) {
-                // 如果缓存中有值，直接返回缓存中的值
-                return ResultUtils.success((QuestionBankVO) cachedQuestionBankVO);
-            }
-        }
+        // todo 取消注释开启 hotkey
+        // // 生成 key
+        // String key = "bank_detail_" + id;
+        // // 如果是热 key
+        // if (JdHotKeyStore.isHotKey(key)) {
+        //     // 从本地缓存中获取缓存值
+        //     Object cachedQuestionBankVO = JdHotKeyStore.get(key);
+        //     if (cachedQuestionBankVO != null) {
+        //         // 如果缓存中有值，直接返回缓存中的值
+        //         return ResultUtils.success((QuestionBankVO) cachedQuestionBankVO);
+        //     }
+        // }
 
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
@@ -176,9 +186,9 @@ public class QuestionBankController {
             Page<QuestionVO> questionVOPage = questionService.getQuestionVOPage(questionPage, request);
             questionBankVO.setQuestionVOPage(questionVOPage);
         }
-
-        // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
-        JdHotKeyStore.smartSet(key, questionBankVO);
+        // todo 取消注释开启 hotkey
+        // // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
+        // JdHotKeyStore.smartSet(key, questionBankVO);
 
         return ResultUtils.success(questionBankVO);
     }
@@ -186,12 +196,14 @@ public class QuestionBankController {
     /**
      * 分页获取题库列表（仅管理员可用）
      *
-     * @param questionBankQueryRequest
-     * @return
+     * @param questionBankQueryRequest 获取题库请求
+     * @return QuestionBank 列表
      */
     @PostMapping("/list/page")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Page<QuestionBank>> listQuestionBankByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest) {
+    public BaseResponse<Page<QuestionBank>> listQuestionBankByPage(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest
+    ) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
         // 查询数据库
@@ -203,17 +215,19 @@ public class QuestionBankController {
     /**
      * 分页获取题库列表（封装类）
      *
-     * @param questionBankQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQueryRequest 获取题库请求
+     * @param request HttpServletRequest
+     * @return QuestionBankVO
      */
     @PostMapping("/list/page/vo")
     @SentinelResource(value = SentinelConstant.listQuestionBankVOByPage,
             blockHandler = "handleBlockException",
             fallback = "handleFallback"
     )
-    public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-                                                                       HttpServletRequest request) {
+    public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request
+    ) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
         // 限制爬虫
@@ -227,10 +241,13 @@ public class QuestionBankController {
 
     /**
      * listQuestionBankVOByPage 流控操作
-     * 限流：提示“系统压力过大，请耐心等待”
+     * 限流：提示 "系统压力过大，请耐心等待"
      */
-    public BaseResponse<Page<QuestionBankVO>> handleBlockException(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-                                                                   HttpServletRequest request, BlockException ex) {
+    public BaseResponse<Page<QuestionBankVO>> handleBlockException(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request,
+            BlockException ex
+    ) {
         // 降级操作
         if (ex instanceof DegradeException) {
             return handleFallback(questionBankQueryRequest, request, ex);
@@ -243,18 +260,21 @@ public class QuestionBankController {
     /**
      * listQuestionBankVOByPage 降级操作：直接返回本地数据
      */
-    public BaseResponse<Page<QuestionBankVO>> handleFallback(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
-                                                             HttpServletRequest request, Throwable ex) {
+    public BaseResponse<Page<QuestionBankVO>> handleFallback(
+            @RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+            HttpServletRequest request,
+            Throwable ex
+    ) {
         // 可以返回本地数据或空数据
         return ResultUtils.success(null);
     }
 
     /**
-     * 分页获取当前登录用户创建的题库列表
+     * 分页获取当前登录用户创建的题库列表（封装类）
      *
-     * @param questionBankQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQueryRequest 获取题库请求
+     * @param request HttpServletRequest
+     * @return 当前登录用户创建的 QuestionBankVOList
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listMyQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
@@ -277,9 +297,9 @@ public class QuestionBankController {
     /**
      * 编辑题库
      *
-     * @param questionBankEditRequest
-     * @param request
-     * @return
+     * @param questionBankEditRequest 编辑题库请求
+     * @param request HttpServletRequest
+     * @return 成功或失败
      */
     @PostMapping("/edit")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -287,7 +307,7 @@ public class QuestionBankController {
         if (questionBankEditRequest == null || questionBankEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         QuestionBank questionBank = new QuestionBank();
         BeanUtils.copyProperties(questionBankEditRequest, questionBank);
         // 数据校验

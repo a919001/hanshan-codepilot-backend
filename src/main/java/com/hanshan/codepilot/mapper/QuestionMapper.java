@@ -7,12 +7,11 @@ import org.apache.ibatis.annotations.Select;
 import java.util.Date;
 import java.util.List;
 
-
 /**
-* @author LEGION
+* @author 寒山
 * @description 针对表【question(题目)】的数据库操作Mapper
 * @createDate 2024-11-18 20:07:05
-* @Entity generator.domain.Question
+* @Entity com.hanshan.codepilot.model.entity.QuestionBank
 */
 public interface QuestionMapper extends BaseMapper<Question> {
 

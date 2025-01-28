@@ -15,7 +15,9 @@ import java.util.Map;
 @Slf4j
 public class BlackIpUtils {
 
-    public static BitMapBloomFilter bloomFilter;
+    // todo 由于监听器未注入，需要给一个默认值
+    private static BitMapBloomFilter bloomFilter = new BitMapBloomFilter(100);
+    // public static BitMapBloomFilter bloomFilter;
 
     /**
      * 判断 IP 是否在黑名单里

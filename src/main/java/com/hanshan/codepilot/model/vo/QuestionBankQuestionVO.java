@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 题库题目视图
+ * 题库题目关联视图
  */
 @Data
 public class QuestionBankQuestionVO implements Serializable {
@@ -51,8 +51,8 @@ public class QuestionBankQuestionVO implements Serializable {
     /**
      * 封装类转对象
      *
-     * @param questionBankQuestionVO
-     * @return
+     * @param questionBankQuestionVO 题库题目关联视图
+     * @return 题库题目关联实体类
      */
     public static QuestionBankQuestion voToObj(QuestionBankQuestionVO questionBankQuestionVO) {
         if (questionBankQuestionVO == null) {
@@ -66,8 +66,8 @@ public class QuestionBankQuestionVO implements Serializable {
     /**
      * 对象转封装类
      *
-     * @param questionBankQuestion
-     * @return
+     * @param questionBankQuestion 题库题目关联
+     * @return 题目题目关联视图
      */
     public static QuestionBankQuestionVO objToVo(QuestionBankQuestion questionBankQuestion) {
         if (questionBankQuestion == null) {

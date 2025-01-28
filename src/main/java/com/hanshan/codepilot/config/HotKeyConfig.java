@@ -2,15 +2,14 @@ package com.hanshan.codepilot.config;
 
 import com.jd.platform.hotkey.client.ClientStarter;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * hotkey 配置
  */
-@Configuration
-@ConfigurationProperties(prefix = "hotkey")
+// todo 取消注释开启 hotkey
+// @Configuration
+// @ConfigurationProperties(prefix = "hotkey")
 @Data
 public class HotKeyConfig {
 

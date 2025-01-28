@@ -65,23 +65,21 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     /**
      * 校验数据
      *
-     * @param question
-     * @param add      对创建的数据进行校验
+     * @param question 题目
+     * @param add 对创建的数据进行校验
      */
     @Override
     public void validQuestion(Question question, boolean add) {
         ThrowUtils.throwIf(question == null, ErrorCode.PARAMS_ERROR);
-        // todo 从对象中取值
+        // 从对象中取值
         String title = question.getTitle();
         String content = question.getContent();
         // 创建数据时，参数不能为空
         if (add) {
-            // todo 补充校验规则
             ThrowUtils.throwIf(StringUtils.isBlank(title), ErrorCode.PARAMS_ERROR);
             ThrowUtils.throwIf(StringUtils.isBlank(content), ErrorCode.PARAMS_ERROR);
         }
         // 修改数据时，有参数则校验
-        // todo 补充校验规则
         if (StringUtils.isNotBlank(title)) {
             ThrowUtils.throwIf(title.length() > 80, ErrorCode.PARAMS_ERROR, "标题过长");
         }
@@ -93,8 +91,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     /**
      * 获取查询条件
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 题目查询请求
+     * @return QueryWrapper
      */
     @Override
     public QueryWrapper<Question> getQueryWrapper(QuestionQueryRequest questionQueryRequest) {
@@ -102,7 +100,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         if (questionQueryRequest == null) {
             return queryWrapper;
         }
-        // todo 从对象中取值
+        // 从对象中取值
         Long id = questionQueryRequest.getId();
         Long notId = questionQueryRequest.getNotId();
         String title = questionQueryRequest.getTitle();
@@ -113,7 +111,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         List<String> tagList = questionQueryRequest.getTags();
         Long userId = questionQueryRequest.getUserId();
         String answer = questionQueryRequest.getAnswer();
-        // todo 补充需要的查询条件
         // 从多字段中搜索
         if (StringUtils.isNotBlank(searchText)) {
             // 需要拼接查询条件
@@ -143,18 +140,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     /**
      * 获取题目封装
      *
-     * @param question
-     * @param request
-     * @return
+     * @param question 题目
+     * @param request HttpServletRequest
+     * @return 封装后的题目
      */
     @Override
     public QuestionVO getQuestionVO(Question question, HttpServletRequest request) {
         // 对象转封装类
         QuestionVO questionVO = QuestionVO.objToVo(question);
-
-        // todo 可以根据需要为封装对象补充值，不需要的内容可以删除
-        // region
-        // 1. 关联查询用户信息
+        // 关联查询用户信息
         Long userId = question.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
@@ -162,17 +156,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
         UserVO userVO = userService.getUserVO(user);
         questionVO.setUser(userVO);
-        // endregion
-
         return questionVO;
     }
 
     /**
      * 分页获取题目封装
      *
-     * @param questionPage
-     * @param request
-     * @return
+     * @param questionPage 题目分页对象
+     * @param request HttpServletRequest
+     * @return 封装后的题目分页
      */
     @Override
     public Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request) {
@@ -182,14 +174,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             return questionVOPage;
         }
         // 对象列表 => 封装对象列表
-        List<QuestionVO> questionVOList = questionList.stream().map(question -> {
-            return QuestionVO.objToVo(question);
-        }).collect(Collectors.toList());
-
-        // todo 可以根据需要为封装对象补充值，不需要的内容可以删除
-        // region
-        // 1. 关联查询用户信息
-        Set<Long> userIdSet = questionList.stream().map(Question::getUserId).collect(Collectors.toSet());
+        List<QuestionVO> questionVOList = questionList.stream()
+                .map(QuestionVO::objToVo)
+                .collect(Collectors.toList());
+        // 关联查询用户信息
+        Set<Long> userIdSet = questionList.stream()
+                .map(Question::getUserId)
+                .collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
@@ -201,8 +192,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             }
             questionVO.setUser(userService.getUserVO(user));
         });
-        // endregion
-
         questionVOPage.setRecords(questionVOList);
         return questionVOPage;
     }
@@ -210,8 +199,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     /**
      * 分页获取题目列表
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 题目查询请求
+     * @return 题目分页列表
      */
     @Override
     public Page<Question> listQuestionByPage(QuestionQueryRequest questionQueryRequest) {
@@ -236,16 +225,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 return new Page<>(current, size, 0);
             }
         }
-        // 查询数据库
-        Page<Question> questionPage = this.page(new Page<>(current, size), queryWrapper);
-        return questionPage;
+        // 查询数据库并返回
+        return this.page(new Page<>(current, size), queryWrapper);
     }
 
     /**
      * 从 ES 查询题目
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 题目查询请求
+     * @return Question 分页对象
      */
     @Override
     public Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest) {
@@ -261,7 +249,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         int pageSize = questionQueryRequest.getPageSize();
         String sortField = questionQueryRequest.getSortField();
         String sortOrder = questionQueryRequest.getSortOrder();
-
         // 构造查询条件
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         // 过滤

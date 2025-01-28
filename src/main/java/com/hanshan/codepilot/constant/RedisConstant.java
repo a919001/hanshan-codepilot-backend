@@ -12,6 +12,7 @@ public interface RedisConstant {
 
     /**
      * 获取用户签到记录的 Redis Key
+     *
      * @param year 年份
      * @param userId 用户 id
      * @return 拼接好的 Redis Key

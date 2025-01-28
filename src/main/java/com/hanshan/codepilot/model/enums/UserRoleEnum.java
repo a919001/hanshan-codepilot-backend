@@ -1,9 +1,10 @@
 package com.hanshan.codepilot.model.enums;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * 用户角色枚举
@@ -26,7 +27,7 @@ public enum UserRoleEnum {
     /**
      * 获取值列表
      *
-     * @return
+     * @return 枚举值列表
      */
     public static List<String> getValues() {
         return Arrays.stream(values()).map(item -> item.value).collect(Collectors.toList());
@@ -35,8 +36,8 @@ public enum UserRoleEnum {
     /**
      * 根据 value 获取枚举
      *
-     * @param value
-     * @return
+     * @param value value
+     * @return 枚举值
      */
     public static UserRoleEnum getEnumByValue(String value) {
         if (ObjectUtils.isEmpty(value)) {

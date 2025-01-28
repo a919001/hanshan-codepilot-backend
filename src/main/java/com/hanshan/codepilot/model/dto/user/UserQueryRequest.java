@@ -1,9 +1,11 @@
 package com.hanshan.codepilot.model.dto.user;
 
 import com.hanshan.codepilot.common.PageRequest;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 用户查询请求
@@ -41,5 +43,6 @@ public class UserQueryRequest extends PageRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

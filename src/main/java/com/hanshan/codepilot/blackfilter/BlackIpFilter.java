@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * 黑名单 ip 过滤器
+ */
 @WebFilter(urlPatterns = "/*", filterName = "blackIpFilter")
 public class BlackIpFilter implements Filter {
 

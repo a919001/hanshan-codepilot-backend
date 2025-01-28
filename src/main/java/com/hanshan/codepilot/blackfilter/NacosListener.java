@@ -6,17 +6,19 @@ import com.alibaba.nacos.api.config.listener.Listener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Nacos 监听器
+ */
 @Slf4j
-@Component
+// todo 取消注释开启 nacos
+// @Component
 public class NacosListener implements InitializingBean {
 
     @NacosInjected
@@ -36,7 +38,7 @@ public class NacosListener implements InitializingBean {
             final ThreadFactory threadFactory = new ThreadFactory() {
                 private final AtomicInteger poolNumber = new AtomicInteger(1);
                 @Override
-                public Thread newThread(@NotNull Runnable r) {
+                public Thread newThread(@org.jetbrains.annotations.NotNull Runnable r) {
                     Thread thread = new Thread(r);
                     thread.setName("refresh-ThreadPool" + poolNumber.getAndIncrement());
                     return thread;

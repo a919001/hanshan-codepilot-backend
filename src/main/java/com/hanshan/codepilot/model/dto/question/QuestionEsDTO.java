@@ -1,16 +1,16 @@
 package com.hanshan.codepilot.model.dto.question;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.hanshan.codepilot.model.entity.Question;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * 题目 ES 包装类
  **/
-
-@Document(indexName = "question")
+// todo 取消注释开启 ES
+// @Document(indexName = "question")
 @Data
 public class QuestionEsDTO implements Serializable {
 
@@ -42,14 +42,14 @@ public class QuestionEsDTO implements Serializable {
     private String content;
 
     /**
-     * 标签列表（json 数组）
-     */
-    private List<String> tags;
-
-    /**
-     * 推荐答案
+     * 答案
      */
     private String answer;
+
+    /**
+     * 标签列表
+     */
+    private List<String> tags;
 
     /**
      * 创建用户 id
@@ -59,13 +59,13 @@ public class QuestionEsDTO implements Serializable {
     /**
      * 创建时间
      */
-    @Field(index = false, store = true, type = FieldType.Date, format = {}, pattern = DATE_TIME_PATTERN)
+    @Field(type = FieldType.Date, format = {}, pattern = DATE_TIME_PATTERN)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @Field(index = false, store = true, type = FieldType.Date, format = {}, pattern = DATE_TIME_PATTERN)
+    @Field(type = FieldType.Date, format = {}, pattern = DATE_TIME_PATTERN)
     private Date updateTime;
 
     /**
@@ -73,13 +73,14 @@ public class QuestionEsDTO implements Serializable {
      */
     private Integer isDelete;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * 对象转包装类
      *
-     * @param question
-     * @return
+     * @param question 题目实体类
+     * @return 题目 ES 包装类
      */
     public static QuestionEsDTO objToDto(Question question) {
         if (question == null) {
@@ -88,7 +89,7 @@ public class QuestionEsDTO implements Serializable {
         QuestionEsDTO questionEsDTO = new QuestionEsDTO();
         BeanUtils.copyProperties(question, questionEsDTO);
         String tagsStr = question.getTags();
-        if (StringUtils.isNotBlank(tagsStr)) {
+        if (StrUtil.isNotBlank(tagsStr)) {
             questionEsDTO.setTags(JSONUtil.toList(JSONUtil.parseArray(tagsStr), String.class));
         }
         return questionEsDTO;
@@ -97,8 +98,8 @@ public class QuestionEsDTO implements Serializable {
     /**
      * 包装类转对象
      *
-     * @param questionEsDTO
-     * @return
+     * @param questionEsDTO 题目 ES 包装类
+     * @return 题目实体类
      */
     public static Question dtoToObj(QuestionEsDTO questionEsDTO) {
         if (questionEsDTO == null) {

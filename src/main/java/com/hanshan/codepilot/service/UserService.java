@@ -6,7 +6,6 @@ import com.hanshan.codepilot.model.dto.user.UserQueryRequest;
 import com.hanshan.codepilot.model.entity.User;
 import com.hanshan.codepilot.model.vo.LoginUserVO;
 import com.hanshan.codepilot.model.vo.UserVO;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,88 +30,80 @@ public interface UserService extends IService<User> {
      *
      * @param userAccount  用户账户
      * @param userPassword 用户密码
-     * @param request
+     * @param request HttpServletRequest
      * @return 脱敏后的用户信息
      */
     LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
 
     /**
-     * 用户登录（微信开放平台）
-     *
-     * @param wxOAuth2UserInfo 从微信获取的用户信息
-     * @param request
-     * @return 脱敏后的用户信息
-     */
-    LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request);
-
-    /**
      * 获取当前登录用户
      *
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return 当前登录用户
      */
     User getLoginUser(HttpServletRequest request);
 
     /**
      * 获取当前登录用户（允许未登录）
      *
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return 当前登录用户
      */
     User getLoginUserPermitNull(HttpServletRequest request);
 
     /**
      * 是否为管理员
      *
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return 是 or 否
      */
     boolean isAdmin(HttpServletRequest request);
 
     /**
      * 是否为管理员
      *
-     * @param user
-     * @return
+     * @param user 用户
+     * @return 是 or 否
      */
     boolean isAdmin(User user);
 
     /**
      * 用户注销
      *
-     * @param request
-     * @return
+     * @param request HttpServletRequest
+     * @return 成功 or 失败
      */
     boolean userLogout(HttpServletRequest request);
 
     /**
      * 获取脱敏的已登录用户信息
      *
-     * @return
+     * @param user 登录用户信息
+     * @return 脱敏后的已登录用户信息
      */
     LoginUserVO getLoginUserVO(User user);
 
     /**
      * 获取脱敏的用户信息
      *
-     * @param user
-     * @return
+     * @param user 用户信息
+     * @return 脱敏后的用户信息
      */
     UserVO getUserVO(User user);
 
     /**
      * 获取脱敏的用户信息
      *
-     * @param userList
-     * @return
+     * @param userList 用户信息列表
+     * @return 脱敏后的用户信息列表
      */
     List<UserVO> getUserVO(List<User> userList);
 
     /**
      * 获取查询条件
      *
-     * @param userQueryRequest
-     * @return
+     * @param userQueryRequest 获取用户请求
+     * @return QueryWrapper
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 

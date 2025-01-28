@@ -54,17 +54,17 @@ public class QuestionController {
     // region 增删改查
 
     /**
-     * 创建题目
+     * 创建题目（仅管理员可用）
      *
-     * @param questionAddRequest
-     * @param request
-     * @return
+     * @param questionAddRequest 创建题目请求
+     * @param request HttpServletRequest
+     * @return 新题目 id
      */
     @PostMapping("/add")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         Question question = new Question();
         BeanUtils.copyProperties(questionAddRequest, question);
         List<String> tags = questionAddRequest.getTags();
@@ -73,7 +73,7 @@ public class QuestionController {
         }
         // 数据校验
         questionService.validQuestion(question, true);
-        // todo 填充默认值
+        // 填充默认值
         User loginUser = userService.getLoginUser(request);
         question.setUserId(loginUser.getId());
         // 写入数据库
@@ -85,11 +85,11 @@ public class QuestionController {
     }
 
     /**
-     * 删除题目
+     * 删除题目（仅管理员可用）
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除题目请求
+     * @param request HttpServletRequest
+     * @return 成功或失败
      */
     @PostMapping("/delete")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -115,8 +115,8 @@ public class QuestionController {
     /**
      * 更新题目（仅管理员可用）
      *
-     * @param questionUpdateRequest
-     * @return
+     * @param questionUpdateRequest 更新题目请求
+     * @return 成功或失败
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -196,8 +196,8 @@ public class QuestionController {
     /**
      * 分页获取题目列表（仅管理员可用）
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @return 题目分页列表
      */
     @PostMapping("/list/page")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -210,13 +210,15 @@ public class QuestionController {
     /**
      * 分页获取题目列表（封装类）
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @param request HttpServletRequest
+     * @return 封装后的题目分页列表
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-                                                               HttpServletRequest request) {
+    public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(
+            @RequestBody QuestionQueryRequest questionQueryRequest,
+            HttpServletRequest request
+    ) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
@@ -231,13 +233,15 @@ public class QuestionController {
     /**
      * 分页获取题目列表（封装类），Sentinel 限流版
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @param request HttpServletRequest
+     * @return 封装后的题目分页列表
      */
     @PostMapping("/list/page/vo/sentinel")
-    public BaseResponse<Page<QuestionVO>> listQuestionVOByPageSentinel(@RequestBody QuestionQueryRequest questionQueryRequest,
-                                                               HttpServletRequest request) {
+    public BaseResponse<Page<QuestionVO>> listQuestionVOByPageSentinel(
+            @RequestBody QuestionQueryRequest questionQueryRequest,
+            HttpServletRequest request
+    ) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
@@ -278,16 +282,16 @@ public class QuestionController {
      */
     public BaseResponse<Page<QuestionVO>> handleFallback(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                              HttpServletRequest request, Throwable ex) {
-        // 可以返回本地数据或空数据
+        // 返回本地数据或空数据
         return ResultUtils.success(null);
     }
 
     /**
      * 分页获取当前登录用户创建的题目列表
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @param request HttpServletRequest
+     * @return 当前登录用户创建的题目列表
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -310,17 +314,20 @@ public class QuestionController {
     /**
      * 编辑题目
      *
-     * @param questionEditRequest
-     * @param request
-     * @return
+     * @param questionEditRequest 编辑题目请求
+     * @param request HttpServletRequest
+     * @return 成功或失败
      */
     @PostMapping("/edit")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> editQuestion(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
+    public BaseResponse<Boolean> editQuestion(
+            @RequestBody QuestionEditRequest questionEditRequest, 
+            HttpServletRequest request
+    ) {
         if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 将请求类和 DTO 进行转换
         Question question = new Question();
         List<String> tags = questionEditRequest.getTags();
         if (tags != null) {
@@ -349,17 +356,23 @@ public class QuestionController {
     /**
      * 从 ES 查询题目
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @param request HttpServletRequest
+     * @return 封装后的题目列表
      */
     @PostMapping("/search/page/vo")
-    public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-                                                                 HttpServletRequest request) {
+    public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(
+            @RequestBody QuestionQueryRequest questionQueryRequest,
+            HttpServletRequest request
+    ) {
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(size > 100, ErrorCode.PARAMS_ERROR);
-        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        // todo 取消注释开启 ES
+        // 查询 ES
+        // Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        // 查询数据库（作为没有 ES 的降级方案）
+        Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
     }
 
@@ -375,5 +388,4 @@ public class QuestionController {
         questionService.batchDeleteQuestions(questionBatchDeleteRequest.getQuestionIdList());
         return ResultUtils.success(true);
     }
-
 }

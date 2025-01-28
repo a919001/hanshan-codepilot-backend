@@ -4,6 +4,7 @@ import com.hanshan.codepilot.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -59,5 +60,6 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
      */
     private Long questionBankId;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

@@ -13,14 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 题库题目服务
+ * 题库题目关联服务
  */
 public interface QuestionBankQuestionService extends IService<QuestionBankQuestion> {
 
     /**
      * 校验数据
      *
-     * @param questionBankQuestion
+     * @param questionBankQuestion 题库题目关联
      * @param add 对创建的数据进行校验
      */
     void validQuestionBankQuestion(QuestionBankQuestion questionBankQuestion, boolean add);
@@ -28,26 +28,26 @@ public interface QuestionBankQuestionService extends IService<QuestionBankQuesti
     /**
      * 获取查询条件
      *
-     * @param questionBankQuestionQueryRequest
-     * @return
+     * @param questionBankQuestionQueryRequest 获取题库题目关联请求
+     * @return QueryWrapper
      */
     QueryWrapper<QuestionBankQuestion> getQueryWrapper(QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest);
     
     /**
-     * 获取题库题目封装
+     * 获取题库题目关联封装
      *
-     * @param questionBankQuestion
-     * @param request
-     * @return
+     * @param questionBankQuestion 题库题目关联
+     * @param request HttpServletRequest
+     * @return 封装后的题库题目关联
      */
     QuestionBankQuestionVO getQuestionBankQuestionVO(QuestionBankQuestion questionBankQuestion, HttpServletRequest request);
 
     /**
-     * 分页获取题库题目封装
+     * 分页获取题库题目关联封装
      *
-     * @param questionBankQuestionPage
-     * @param request
-     * @return
+     * @param questionBankQuestionPage 获取题库题目关联分页对象
+     * @param request HttpServletRequest
+     * @return 封装后的题库题目关联分页列表
      */
     Page<QuestionBankQuestionVO> getQuestionBankQuestionVOPage(Page<QuestionBankQuestion> questionBankQuestionPage, HttpServletRequest request);
 

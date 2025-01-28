@@ -14,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,questionBankId,questionId,
-        userId,createTime,updateTime
+        id,question_bank_id,question_id,
+        user_id,create_time,update_time
     </sql>
 </mapper>

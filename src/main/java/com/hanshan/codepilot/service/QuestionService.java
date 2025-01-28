@@ -18,7 +18,7 @@ public interface QuestionService extends IService<Question> {
     /**
      * 校验数据
      *
-     * @param question
+     * @param question 题目
      * @param add 对创建的数据进行校验
      */
     void validQuestion(Question question, boolean add);
@@ -26,42 +26,42 @@ public interface QuestionService extends IService<Question> {
     /**
      * 获取查询条件
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @return QueryWrapper
      */
     QueryWrapper<Question> getQueryWrapper(QuestionQueryRequest questionQueryRequest);
     
     /**
      * 获取题目封装
      *
-     * @param question
-     * @param request
-     * @return
+     * @param question 题目
+     * @param request HttpServletRequest
+     * @return 封装后的题目
      */
     QuestionVO getQuestionVO(Question question, HttpServletRequest request);
 
     /**
      * 分页获取题目封装
      *
-     * @param questionPage
-     * @param request
-     * @return
+     * @param questionPage 题目分页对象
+     * @param request HttpServletRequest
+     * @return 封装后的题目分页对象
      */
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
 
     /**
      * 分页获取题目列表
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @return 题目分页列表
      */
     Page<Question> listQuestionByPage(QuestionQueryRequest questionQueryRequest);
 
     /**
      * 从 ES 查询题目
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest 获取题目请求
+     * @return 题目分页对象
      */
     Page<Question> searchFromEs(QuestionQueryRequest questionQueryRequest);
 
